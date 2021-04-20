@@ -75,7 +75,7 @@ class TrainerWindow(QWidget):
 
     def create_text_label(self, text):
         text_label = QLabel()
-        with open(f'C:\\Users\\Пользователь\\Desktop\\домашки\\task\\texts\\{text}', 'r', encoding='utf-8') as t:
+        with open(f'texts\\{text}', 'r', encoding='utf-8') as t:
             lines = t.read()
             text_label.setText(lines)
         text_label.setFont(QtGui.QFont("Times", 18))
@@ -102,22 +102,6 @@ class StatisticsWindow(QWidget):
 
     def show_window(self):
         self.show()
-
-    # def clear_layout(self, layout):
-    #     print("-- -- input layout: " + str(layout))
-    #     for i in reversed(range(layout.count())):
-    #         layoutItem = layout.itemAt(i)
-    #         if layoutItem.widget() is not None:
-    #             widgetToRemove = layoutItem.widget()
-    #             print("found widget: " + str(widgetToRemove))
-    #             widgetToRemove.setParent(None)
-    #             layout.removeWidget(widgetToRemove)
-    #         elif layoutItem.spacerItem() is not None:
-    #             print("found spacer: " + str(layoutItem.spacerItem()))
-    #         else:
-    #             layoutToRemove = layout.itemAt(i)
-    #             print("-- found Layout: " + str(layoutToRemove))
-    #             self.clear_layout(layoutToRemove)
 
 
 if __name__ == '__main__':
