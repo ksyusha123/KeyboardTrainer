@@ -1,0 +1,127 @@
+import sys
+
+from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, QLabel
+from PyQt5 import QtGui
+from PyQt5 import QtCore
+
+
+class StartWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.statistics_window = StatisticsWindow()
+        self.trainer_window = TrainerWindow()
+        self.title = "Клавиатурный тренажер"
+        self.top = 100
+        self.left = 100
+        self.width = 400
+        self.height = 300
+
+        self.init_window()
+
+    def init_window(self):
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
+
+        self.create_layout()
+
+        self.show()
+
+    def create_layout(self):
+        vertical_layout = QVBoxLayout()
+
+        start_button = QPushButton('Начать печатать', self)
+        start_button.setMaximumWidth(160)
+        start_button.clicked.connect(self.trainer_window.show_window)
+
+        statistics_button = QPushButton('Показать статистику', self)
+        statistics_button.setMaximumWidth(160)
+        statistics_button.clicked.connect(self.statistics_window
+                                          .show_window)
+
+        vertical_layout.addWidget(start_button)
+        vertical_layout.addWidget(statistics_button)
+
+        vertical_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
+        vertical_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+
+        self.setLayout(vertical_layout)
+
+
+class TrainerWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.title = "Клавиатурный тренажер"
+        self.top = 100
+        self.left = 100
+        self.width = 800
+        self.height = 600
+
+        self.init_window()
+
+    def init_window(self):
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
+        self.create_layout()
+
+    def create_layout(self):
+        layout = QVBoxLayout()
+        text_label = self.create_text_label('АланТьюринг.txt')
+        layout.addWidget(text_label)
+
+        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
+        layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+
+        self.setLayout(layout)
+
+    def create_text_label(self, text):
+        text_label = QLabel()
+        with open(f'C:\\Users\\Пользователь\\Desktop\\домашки\\task\\texts\\{text}', 'r', encoding='utf-8') as t:
+            lines = t.read()
+            text_label.setText(lines)
+        text_label.setFont(QtGui.QFont("Times", 18))
+        return text_label
+
+    def show_window(self):
+        self.show()
+
+
+class StatisticsWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.title = "Клавиатурный тренажер"
+        self.top = 100
+        self.left = 100
+        self.width = 800
+        self.height = 600
+
+        self.init_window()
+
+    def init_window(self):
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
+
+    def show_window(self):
+        self.show()
+
+    # def clear_layout(self, layout):
+    #     print("-- -- input layout: " + str(layout))
+    #     for i in reversed(range(layout.count())):
+    #         layoutItem = layout.itemAt(i)
+    #         if layoutItem.widget() is not None:
+    #             widgetToRemove = layoutItem.widget()
+    #             print("found widget: " + str(widgetToRemove))
+    #             widgetToRemove.setParent(None)
+    #             layout.removeWidget(widgetToRemove)
+    #         elif layoutItem.spacerItem() is not None:
+    #             print("found spacer: " + str(layoutItem.spacerItem()))
+    #         else:
+    #             layoutToRemove = layout.itemAt(i)
+    #             print("-- found Layout: " + str(layoutToRemove))
+    #             self.clear_layout(layoutToRemove)
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    start_window = StartWindow()
+    sys.exit(app.exec_())
+
