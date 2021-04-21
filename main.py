@@ -1,6 +1,6 @@
 import sys
 
-from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, QLabel
+from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, QLabel, QLineEdit
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
@@ -80,6 +80,9 @@ class TrainerWindow(QWidget):
             text_label.setText(lines)
         text_label.setFont(QtGui.QFont("Times", 18))
         return text_label
+
+
+
 
     def show_window(self):
         self.show()
