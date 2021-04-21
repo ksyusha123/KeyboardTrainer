@@ -68,6 +68,9 @@ class TrainerWindow(QWidget):
         text_label = self.create_text_label('АланТьюринг.txt')
         layout.addWidget(text_label)
 
+        input_field = self.create_input_field()
+        layout.addWidget(input_field)
+
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
 
@@ -81,7 +84,10 @@ class TrainerWindow(QWidget):
         text_label.setFont(QtGui.QFont("Times", 18))
         return text_label
 
-
+    def create_input_field(self):
+        input_field = QLineEdit()
+        input_field.setStyleSheet('font-weight: 100; font-size:14pt;')
+        return input_field
 
 
     def show_window(self):
