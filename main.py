@@ -82,13 +82,13 @@ class TrainerWindow(QWidget):
             lines = t.read()
             text_label.setText(lines)
         text_label.setFont(QtGui.QFont("Times", 18))
+        text_label.setWordWrap(True)
         return text_label
 
     def create_input_field(self):
         input_field = QLineEdit()
         input_field.setStyleSheet('font-weight: 100; font-size:14pt;')
         return input_field
-
 
     def show_window(self):
         self.show()
