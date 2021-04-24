@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, QLa
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
+import training_mode
+
 
 class StartWindow(QWidget):
     def __init__(self):
@@ -68,7 +70,10 @@ class TrainerWindow(QWidget):
         text_label = self.create_text_label('АланТьюринг.txt')
         layout.addWidget(text_label)
 
+        # tr = training_mode.Training()
+
         input_field = self.create_input_field()
+        # input_field.textChanged[str].connect()
         layout.addWidget(input_field)
 
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
@@ -114,7 +119,10 @@ class StatisticsWindow(QWidget):
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    start_window = StartWindow()
-    sys.exit(app.exec_())
+    # app = QApplication(sys.argv)
+    # start_window = StartWindow()
+    text = input()
+    train = training_mode.Training(text)
+    train.start_training()
+    # sys.exit(app.exec_())
 
