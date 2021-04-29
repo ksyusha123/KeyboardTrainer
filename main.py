@@ -1,6 +1,7 @@
 import sys
 
-from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, QLabel, QLineEdit
+from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, \
+    QGroupBox, QHBoxLayout, QLabel, QLineEdit
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
@@ -23,9 +24,7 @@ class StartWindow(QWidget):
     def init_window(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
-
         self.create_layout()
-
         self.show()
 
     def create_layout(self):
@@ -58,6 +57,9 @@ class TrainerWindow(QWidget):
         self.width = 800
         self.height = 600
 
+        self.input_field = self.create_input_field()
+        self.training = training_mode.create_training('АланТьюринг.txt')
+
         self.init_window()
 
     def init_window(self):
@@ -70,16 +72,26 @@ class TrainerWindow(QWidget):
         text_label = self.create_text_label('АланТьюринг.txt')
         layout.addWidget(text_label)
 
-        # tr = training_mode.Training()
+        hlayout = QHBoxLayout()
+        # input_field = self.create_input_field()
+        hlayout.addWidget(self.input_field)
 
-        input_field = self.create_input_field()
-        # input_field.textChanged[str].connect()
-        layout.addWidget(input_field)
+        # finish_button = QPushButton("Закончить")
+        # finish_button.setMinimumHeight(31)
+        # hlayout.addWidget(finish_button)
+        # training = training_mode.create_training('АланТьюринг.txt')
+        self.input_field.textChanged.connect(self.training.start)
+        self.input_field.returnPressed.connect(self.finish)
+        layout.addLayout(hlayout)
 
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignVCenter)
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
 
         self.setLayout(layout)
+
+    def finish(self):
+        user_text = self.input_field.text()
+        self.training.finish(user_text)
 
     def create_text_label(self, text):
         text_label = QLabel()
@@ -119,10 +131,10 @@ class StatisticsWindow(QWidget):
 
 
 if __name__ == '__main__':
-    # app = QApplication(sys.argv)
-    # start_window = StartWindow()
-    text = input()
-    train = training_mode.Training(text)
-    train.start_training()
-    # sys.exit(app.exec_())
+    app = QApplication(sys.argv)
+    start_window = StartWindow()
+    # text = input()
+    # train = training_mode.Training(text)
+    # train.start_training()
+    sys.exit(app.exec_())
 
