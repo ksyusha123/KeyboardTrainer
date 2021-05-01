@@ -133,8 +133,5 @@ class StatisticsWindow(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     start_window = StartWindow()
-    # text = input()
-    # train = training_mode.Training(text)
-    # train.start_training()
     sys.exit(app.exec_())
 

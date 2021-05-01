@@ -1,4 +1,5 @@
 from time import perf_counter
+from datetime import datetime
 
 
 def create_training(text):
@@ -8,9 +9,6 @@ def create_training(text):
 
 class Training:
     def __init__(self, text):
-        self.duration = 0
-        self.speed = 0
-        self.started = False
         self.training_text = text
         self.current_text = ''
         self.start_time = 0
@@ -18,29 +16,25 @@ class Training:
 
     def start(self):
         self.start_time = perf_counter()
-        self.started = True
 
     def finish(self, user_text):
         self.finish_time = perf_counter()
         self.current_text = user_text
         stat = self.make_statistics()
-        # print(stat)
-        with open('statistics.txt', 'a') as f:
-            for pair in stat.keys():
-                f.write(pair)
+        self.save_statistics(stat)
 
     def make_statistics(self):
         right_symbols = 0
         total_time = self.finish_time - self.start_time
-        for i in range(min(len(self.current_text),len(self.training_text))):
+        for i in range(min(len(self.current_text), len(self.training_text))):
             if self.training_text[i] == self.current_text[i]:
                 right_symbols += 1
         speed = len(self.training_text) / total_time
         accuracy = right_symbols / len(self.training_text) * 100
-        return {'скорость': speed,
-                'точность': accuracy}
+        # time = datetime.now()
+        return [str(speed), str(accuracy)]
 
-
-
-
-
+    def save_statistics(self, stat):
+        stat_line = ' '.join(stat)
+        with open('statistics.txt', 'a', encoding='utf-8') as f:
+            f.write(f'{stat_line}\n')
