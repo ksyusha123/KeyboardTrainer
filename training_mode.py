@@ -31,8 +31,9 @@ class Training:
                 right_symbols += 1
         speed = len(self.training_text) / total_time
         accuracy = right_symbols / len(self.training_text) * 100
-        # time = datetime.now()
-        return [str(speed), str(accuracy)]
+        time = datetime.now()
+        time_str = time.strftime('%d/%m/%y %H:%M:%S')
+        return [str(speed), str(accuracy), time_str]
 
     def save_statistics(self, stat):
         stat_line = ' '.join(stat)
