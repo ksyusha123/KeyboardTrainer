@@ -57,8 +57,13 @@ class TrainerWindow(QWidget):
         self.width = 800
         self.height = 600
 
+        self.text_filename = 'ЗаконАмдала.txt'
+        self.text = self.get_text()
+
+        self.text_label = self.create_text_label()
+
         self.input_field = self.create_input_field()
-        self.training = training_mode.create_training('АланТьюринг.txt')
+        self.training = training_mode.create_training(self.text_filename)
 
         self.init_window()
 
@@ -69,18 +74,12 @@ class TrainerWindow(QWidget):
 
     def create_layout(self):
         layout = QVBoxLayout()
-        text_label = self.create_text_label('АланТьюринг.txt')
-        layout.addWidget(text_label)
+        layout.addWidget(self.text_label)
 
         hlayout = QHBoxLayout()
-        # input_field = self.create_input_field()
         hlayout.addWidget(self.input_field)
 
-        # finish_button = QPushButton("Закончить")
-        # finish_button.setMinimumHeight(31)
-        # hlayout.addWidget(finish_button)
-        # training = training_mode.create_training('АланТьюринг.txt')
-        self.input_field.textChanged.connect(self.training.start)
+        self.input_field.textChanged.connect(self.update_all)
         self.input_field.returnPressed.connect(self.finish)
         layout.addLayout(hlayout)
 
@@ -89,15 +88,26 @@ class TrainerWindow(QWidget):
 
         self.setLayout(layout)
 
+    def update_all(self):
+        if not self.training.started:
+            self.training.start()
+            self.training.started = True
+        self.training.current_letter_index += 1
+        self.color_text(self.training.current_letter_index)
+
+    def color_text(self, last_letter_index):
+        current_text = self.text[:last_letter_index + 1]
+        text_to_type = self.text[last_letter_index + 1:]
+        self.text_label.setText(f'<font color="red">{current_text}</font>{text_to_type}')
+
+
     def finish(self):
         user_text = self.input_field.text()
         self.training.finish(user_text)
 
-    def create_text_label(self, text):
+    def create_text_label(self):
         text_label = QLabel()
-        with open(f'texts\\{text}', 'r', encoding='utf-8') as t:
-            lines = t.read()
-            text_label.setText(lines)
+        text_label.setText(self.text)
         text_label.setFont(QtGui.QFont("Times", 18))
         text_label.setWordWrap(True)
         return text_label
@@ -109,6 +119,10 @@ class TrainerWindow(QWidget):
 
     def show_window(self):
         self.show()
+
+    def get_text(self):
+        with open(f'texts\\{self.text_filename}', 'r', encoding='utf-8') as t:
+            return t.read()
 
 
 class StatisticsWindow(QWidget):

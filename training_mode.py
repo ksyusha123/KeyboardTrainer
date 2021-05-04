@@ -14,6 +14,10 @@ class Training:
         self.start_time = 0
         self.finish_time = 0
 
+        self.current_letter_index = -1
+
+        self.started = False
+
     def start(self):
         self.start_time = perf_counter()
 
