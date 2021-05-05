@@ -60,10 +60,12 @@ class TrainerWindow(QWidget):
         self.text_filename = 'ЗаконАмдала.txt'
         self.text = self.get_text()
 
+        self.previous_text_status = ''
+
         self.text_label = self.create_text_label()
 
         self.input_field = self.create_input_field()
-        self.training = training_mode.create_training(self.text_filename)
+        self.training = training_mode.create_training(self.text)
 
         self.init_window()
 
@@ -92,14 +94,18 @@ class TrainerWindow(QWidget):
         if not self.training.started:
             self.training.start()
             self.training.started = True
-        self.training.current_letter_index += 1
-        self.color_text(self.training.current_letter_index)
+        status = self.find_changes()
+        self.color_text(self.training.current_letter_index, status)
+        self.previous_text_status = self.input_field.text()
 
-    def color_text(self, last_letter_index):
-        current_text = self.text[:last_letter_index + 1]
+    def color_text(self, last_letter_index, status):
+        letter_changed = self.text[last_letter_index:last_letter_index+1]
+        text_unchanged = self.text[:last_letter_index]
         text_to_type = self.text[last_letter_index + 1:]
-        self.text_label.setText(f'<font color="red">{current_text}</font>{text_to_type}')
-
+        if status == 'right':
+            self.text_label.setText(f'{text_unchanged}<font color="green">{letter_changed}</font>{text_to_type}')
+        else:
+            self.text_label.setText(f'{text_unchanged}<font color="red">{letter_changed}</font>{text_to_type}')
 
     def finish(self):
         user_text = self.input_field.text()
@@ -123,6 +129,19 @@ class TrainerWindow(QWidget):
     def get_text(self):
         with open(f'texts\\{self.text_filename}', 'r', encoding='utf-8') as t:
             return t.read()
+
+    def find_changes(self):
+        input_text = self.input_field.text()
+        if len(input_text) < len(self.previous_text_status):
+            self.training.current_letter_index -= 1
+            return 'delete'
+        else:
+            self.training.current_letter_index += 1
+            if (self.text[self.training.current_letter_index] ==
+                    self.input_field.text()[self.training.current_letter_index]):
+                return 'right'
+            else:
+                return 'wrong'
 
 
 class StatisticsWindow(QWidget):
@@ -148,4 +167,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     start_window = StartWindow()
     sys.exit(app.exec_())
-
