@@ -2,7 +2,7 @@ import sys
 
 from TrainerWindow import TrainerWindow
 from PyQt5.QtWidgets import QApplication
-# from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, \
+# from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout,\
 #     QGroupBox, QHBoxLayout, QLabel, QLineEdit
 # from PyQt5 import QtGui
 # from PyQt5 import QtCore

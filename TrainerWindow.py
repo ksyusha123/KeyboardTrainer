@@ -69,7 +69,8 @@ class TrainerWindow(QWidget):
                 color = 'green'
             else:
                 color = 'red'
-            self.text_label.setText(f'{text_unchanged}<font color="{color}">{letter_changed}</font>{text_to_type}')
+            self.text_label.setText(f'{text_unchanged}<font color="{color}">'
+                                    f'{letter_changed}</font>{text_to_type}')
 
     def finish(self):
         user_text = self.input_field.text()
@@ -102,7 +103,8 @@ class TrainerWindow(QWidget):
         else:
             self.training.current_letter_index += 1
             if (self.text[self.training.current_letter_index] ==
-                    self.input_field.text()[self.training.current_letter_index]):
+                    self.input_field.text()
+                    [self.training.current_letter_index]):
                 return 'right'
             else:
                 return 'wrong'
