@@ -49,27 +49,12 @@ from PyQt5.QtWidgets import QApplication
 #
 #         self.setLayout(vertical_layout)
 
-# class StatisticsWindow(QWidget):
-#     def __init__(self):
-#         super().__init__()
-#         self.title = "Клавиатурный тренажер"
-#         self.top = 100
-#         self.left = 100
-#         self.width = 800
-#         self.height = 600
-#
-#         self.init_window()
-#
-#     def init_window(self):
-#         self.setWindowTitle(self.title)
-#         self.setGeometry(self.left, self.top, self.width, self.height)
-#
-#     def show_window(self):
-#         self.show()
-
-
-if __name__ == '__main__':
+def start():
     app = QApplication(sys.argv)
     # start_window = StartWindow()
     trainer_window = TrainerWindow()
     sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    start()

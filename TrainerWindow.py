@@ -6,6 +6,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 import training_mode
+from StatisticsWindow import StatisticsWindow
 
 
 class TrainerWindow(QWidget):
@@ -28,6 +29,8 @@ class TrainerWindow(QWidget):
         self.training = training_mode.create_training(self.text)
 
         self.init_window()
+
+        self.stat_window = QWidget()
 
     def init_window(self):
         self.setWindowTitle(self.title)
@@ -74,7 +77,8 @@ class TrainerWindow(QWidget):
 
     def finish(self):
         user_text = self.input_field.text()
-        self.training.finish(user_text)
+        stat = self.training.finish(user_text)
+        self.stat_window = StatisticsWindow(stat)
 
     def create_text_label(self):
         text_label = QLabel()

@@ -26,6 +26,7 @@ class Training:
         self.current_text = user_text
         stat = self.make_statistics()
         self.save_statistics(stat)
+        return stat
 
     def make_statistics(self):
         right_symbols = 0
@@ -33,7 +34,7 @@ class Training:
         for i in range(min(len(self.current_text), len(self.training_text))):
             if self.training_text[i] == self.current_text[i]:
                 right_symbols += 1
-        speed = len(self.training_text) / total_time
+        speed = len(self.training_text) / (total_time / 60)
         accuracy = right_symbols / len(self.training_text) * 100
         time = datetime.now()
         time_str = time.strftime('%d/%m/%y %H:%M:%S')
