@@ -13,6 +13,9 @@ class StatisticsWindow(QWidget):
         self.text = "Отличная работа!"
         self.init_window()
         self.stat = stat
+
+        self.layout = QVBoxLayout()
+
         self.create_layout()
 
     def init_window(self):
@@ -28,11 +31,13 @@ class StatisticsWindow(QWidget):
         button_layout = QHBoxLayout()
         start_new_game_button = QPushButton('Начать новую игру!', self)
         show_all_stat_button = QPushButton('Таблица рекордов', self)
-        start_new_game_button.clicked.connect(self.pr)
+        start_new_game_button.clicked.connect(self.show_record_table)
         button_layout.addWidget(start_new_game_button)
         button_layout.addWidget(show_all_stat_button)
 
         layout.addLayout(button_layout)
+
+        self.layout = layout
 
         self.setLayout(layout)
 
@@ -44,9 +49,26 @@ class StatisticsWindow(QWidget):
         return stat_label
 
     def make_text_stat(self):
-        text_stat = f'Скорость: {self.stat[0]}\n' \
-                    f'Точность: {self.stat[1]}'
+        text_stat = f'Скорость: {self.stat["speed"]} зн/мин\n' \
+                    f'Точность: {self.stat["accuracy"]}'
         return text_stat
 
-    def pr(self):
-        print('s')
+    def show_record_table(self):
+        widget_to_remove = self.layout.itemAt(0).widget()
+        self.layout.removeWidget(widget_to_remove)
+        record_table_label = self.create_record_table()
+        self.layout.insertWidget(0, record_table_label)
+
+
+    # def clear_layout(self):
+    #     for i in reversed(range(self.layout.count())):
+    #         widget_to_remove = self.layout.itemAt(i).widget()
+    #         self.layout.removeWidget(widget_to_remove)
+    #         if widget_to_remove is not None:
+    #             widget_to_remove.setParent(None)
+
+    def create_record_table(self):
+        record_table_label = QLabel()
+        with open('statistics.txt', 'r', encoding='utf-8') as stat:
+            record_table_label.setText(stat.read())
+        return record_table_label

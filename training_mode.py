@@ -34,13 +34,17 @@ class Training:
         for i in range(min(len(self.current_text), len(self.training_text))):
             if self.training_text[i] == self.current_text[i]:
                 right_symbols += 1
-        speed = len(self.training_text) / (total_time / 60)
-        accuracy = right_symbols / len(self.training_text) * 100
+        speed = round(len(self.current_text) / (total_time / 60))
+        accuracy = 0 if len(self.current_text) == 0 \
+            else round(right_symbols / len(self.current_text) * 100)
         time = datetime.now()
         time_str = time.strftime('%d/%m/%y %H:%M:%S')
-        return [str(speed), str(accuracy), time_str]
+        return {'speed': str(speed),
+                'accuracy': str(accuracy),
+                'time': time_str}
 
-    def save_statistics(self, stat):
-        stat_line = ' '.join(stat)
+    @staticmethod
+    def save_statistics(stat):
+        stat_line = ' '.join(stat.values())
         with open('statistics.txt', 'a', encoding='utf-8') as f:
             f.write(f'{stat_line}\n')

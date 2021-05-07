@@ -6,7 +6,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 import training_mode
-from StatisticsWindow import StatisticsWindow
+from GUI.StatisticsWindow import StatisticsWindow
 
 
 class TrainerWindow(QWidget):
@@ -87,7 +87,8 @@ class TrainerWindow(QWidget):
         text_label.setWordWrap(True)
         return text_label
 
-    def create_input_field(self):
+    @staticmethod
+    def create_input_field():
         input_field = QLineEdit()
         input_field.setStyleSheet('font-weight: 100; font-size:14pt;')
         return input_field
