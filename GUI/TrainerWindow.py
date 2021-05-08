@@ -90,8 +90,6 @@ class TrainerWindow(QWidget):
         input_field.setStyleSheet('font-weight: 100; font-size:14pt;')
         return input_field
 
-    # def show_window(self):
-    #     self.show()
 
     def get_text(self):
         with open(f'texts\\{self.text_filename}', 'r', encoding='utf-8') as t:

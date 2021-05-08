@@ -9,6 +9,8 @@ import sys
 from sys import argv, executable
 import os
 
+import statistics
+
 
 class StatisticsWindow(QWidget):
     def __init__(self, stat):
@@ -76,10 +78,7 @@ class StatisticsWindow(QWidget):
         row_count = 10
         record_table.setColumnCount(column_count)
         record_table.setRowCount(row_count)
-        with open('statistics.txt', 'r', encoding='utf-8') as stat:
-            lines = stat.readlines()
-        lines.sort(key=lambda line: int(line.split()[0]), reverse=True)
-        records = lines[:10]
+        records = statistics.get_top_results(10)
         record_table.setHorizontalHeaderLabels(['Скорость', 'Точность', 'Дата', 'Время'])
         for i in range(row_count):
             items = records[i].split()
