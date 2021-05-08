@@ -49,12 +49,9 @@ from PyQt5.QtWidgets import QApplication
 #
 #         self.setLayout(vertical_layout)
 
-def start():
+
+if __name__ == '__main__':
     app = QApplication(sys.argv)
     # start_window = StartWindow()
     trainer_window = TrainerWindow()
     sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    start()

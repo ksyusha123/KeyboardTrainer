@@ -1,7 +1,13 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
     QLabel, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView
 from PyQt5 import QtGui
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore
+
+import GUI.TrainerWindow
+import sys
+
+from sys import argv, executable
+import os
 
 
 class StatisticsWindow(QWidget):
@@ -33,6 +39,7 @@ class StatisticsWindow(QWidget):
         button_layout = QHBoxLayout()
         start_new_game_button = QPushButton('Начать новую игру!', self)
         show_all_stat_button = QPushButton('Таблица рекордов', self)
+        start_new_game_button.clicked.connect(self.start_new_game)
         show_all_stat_button.clicked.connect(self.show_record_table)
         button_layout.addWidget(start_new_game_button)
         button_layout.addWidget(show_all_stat_button)
@@ -87,4 +94,9 @@ class StatisticsWindow(QWidget):
             vertical_header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
         return record_table
 
+    def start_new_game(self):
+        os.execl(executable, os.path.abspath(__file__), *argv)
+        # QtCore.QCoreApplication.quit()
+        # status = QtCore.QProcess.startDetached(sys.executable, sys.argv)
+        # print(status)
 
