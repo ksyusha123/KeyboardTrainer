@@ -1,5 +1,7 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
+    QLabel, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView
 from PyQt5 import QtGui
+from PyQt5 import QtWidgets
 
 
 class StatisticsWindow(QWidget):
@@ -31,7 +33,7 @@ class StatisticsWindow(QWidget):
         button_layout = QHBoxLayout()
         start_new_game_button = QPushButton('Начать новую игру!', self)
         show_all_stat_button = QPushButton('Таблица рекордов', self)
-        start_new_game_button.clicked.connect(self.show_record_table)
+        show_all_stat_button.clicked.connect(self.show_record_table)
         button_layout.addWidget(start_new_game_button)
         button_layout.addWidget(show_all_stat_button)
 
@@ -56,19 +58,33 @@ class StatisticsWindow(QWidget):
     def show_record_table(self):
         widget_to_remove = self.layout.itemAt(0).widget()
         self.layout.removeWidget(widget_to_remove)
+        widget_to_remove.setParent(None)
         record_table_label = self.create_record_table()
         self.layout.insertWidget(0, record_table_label)
 
-
-    # def clear_layout(self):
-    #     for i in reversed(range(self.layout.count())):
-    #         widget_to_remove = self.layout.itemAt(i).widget()
-    #         self.layout.removeWidget(widget_to_remove)
-    #         if widget_to_remove is not None:
-    #             widget_to_remove.setParent(None)
-
-    def create_record_table(self):
-        record_table_label = QLabel()
+    @staticmethod
+    def create_record_table():
+        record_table = QTableWidget()
+        column_count = 4
+        row_count = 10
+        record_table.setColumnCount(column_count)
+        record_table.setRowCount(row_count)
         with open('statistics.txt', 'r', encoding='utf-8') as stat:
-            record_table_label.setText(stat.read())
-        return record_table_label
+            lines = stat.readlines()
+        lines.sort(key=lambda line: int(line.split()[0]), reverse=True)
+        records = lines[:10]
+        record_table.setHorizontalHeaderLabels(['Скорость', 'Точность', 'Дата', 'Время'])
+        for i in range(row_count):
+            items = records[i].split()
+            for j in range(column_count):
+                record_table.setItem(i, j, QTableWidgetItem(items[j]))
+        record_table.resizeColumnsToContents()
+        horizontal_header = record_table.horizontalHeader()
+        for j in range(column_count):
+            horizontal_header.setSectionResizeMode(j, QtWidgets.QHeaderView.Stretch)
+        vertical_header = record_table.verticalHeader()
+        for i in range(row_count):
+            vertical_header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+        return record_table
+
+

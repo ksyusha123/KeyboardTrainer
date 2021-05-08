@@ -68,10 +68,7 @@ class TrainerWindow(QWidget):
         text_unchanged = self.text[:last_letter_index]
         text_to_type = self.text[last_letter_index + 1:]
         if status == 'right' or status == 'wrong':
-            if status == 'right':
-                color = 'green'
-            else:
-                color = 'red'
+            color = 'green' if status == 'right' else 'red'
             self.text_label.setText(f'{text_unchanged}<font color="{color}">'
                                     f'{letter_changed}</font>{text_to_type}')
 
