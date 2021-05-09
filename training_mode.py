@@ -11,7 +11,6 @@ def create_training(text):
 class Training:
     def __init__(self, text):
         self.training_text = text
-        self.current_text = ''
         self.start_time = 0
         self.finish_time = 0
 
@@ -24,8 +23,7 @@ class Training:
 
     def finish(self, user_text):
         self.finish_time = perf_counter()
-        self.current_text = user_text
         stat = statistics.make_statistics(self.finish_time, self.start_time,
-                                          self.current_text, self.training_text)
+                                          user_text, self.training_text)
         statistics.save_statistics(stat)
         return stat

@@ -20,7 +20,6 @@ class StatisticsWindow(QWidget):
         self.left = 200
         self.width = 500
         self.height = 300
-        self.text = "Отличная работа!"
         self.init_window()
         self.stat = stat
 
@@ -61,7 +60,7 @@ class StatisticsWindow(QWidget):
 
     def make_text_stat(self):
         text_stat = f'Скорость: {self.stat["speed"]} зн/мин\n' \
-                    f'Точность: {self.stat["accuracy"]}'
+                    f'Точность: {self.stat["accuracy"]}%'
         return text_stat
 
     def show_record_table(self):
@@ -79,7 +78,8 @@ class StatisticsWindow(QWidget):
         record_table.setColumnCount(column_count)
         record_table.setRowCount(row_count)
         records = statistics.get_top_results(10)
-        record_table.setHorizontalHeaderLabels(['Скорость', 'Точность', 'Дата', 'Время'])
+        record_table.setHorizontalHeaderLabels(
+            ['Скорость', 'Точность', 'Дата', 'Время'])
         for i in range(row_count):
             items = records[i].split()
             for j in range(column_count):
@@ -87,10 +87,14 @@ class StatisticsWindow(QWidget):
         record_table.resizeColumnsToContents()
         horizontal_header = record_table.horizontalHeader()
         for j in range(column_count):
-            horizontal_header.setSectionResizeMode(j, QtWidgets.QHeaderView.Stretch)
+            horizontal_header.setSectionResizeMode(
+                j, QtWidgets.QHeaderView.Stretch)
         vertical_header = record_table.verticalHeader()
         for i in range(row_count):
-            vertical_header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+            vertical_header.setSectionResizeMode(
+                i, QtWidgets.QHeaderView.Stretch)
+        record_table.setFont(QtGui.QFont('Times', 12))
+        record_table.setSortingEnabled(True)
         return record_table
 
     def start_new_game(self):
@@ -98,4 +102,3 @@ class StatisticsWindow(QWidget):
         # QtCore.QCoreApplication.quit()
         # status = QtCore.QProcess.startDetached(sys.executable, sys.argv)
         # print(status)
-

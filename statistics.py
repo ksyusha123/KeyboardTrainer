@@ -39,6 +39,7 @@ def save_statistics(stat):
 def get_top_results(amount):
     with open('statistics.txt', 'r', encoding='utf-8') as stat:
         lines = stat.readlines()
-    lines.sort(key=lambda line: int(line.split()[0]), reverse=True)
+    lines.sort(key=lambda line: int(line.split()[0]) * int(line.split()[1]),
+               reverse=True)
     records = lines[:amount]
     return records
