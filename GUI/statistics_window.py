@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets, QtCore
 
-import GUI.TrainerWindow
+import GUI.trainer_window
 import sys
 
 from sys import argv, executable

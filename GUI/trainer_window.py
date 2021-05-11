@@ -7,7 +7,8 @@ from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 import training_mode
-from GUI.StatisticsWindow import StatisticsWindow
+from GUI.statistics_window import StatisticsWindow
+import statistics
 
 
 class TrainerWindow(QWidget):
@@ -22,13 +23,16 @@ class TrainerWindow(QWidget):
         self.text_filename = 'ЗаконАмдала.txt'
         self.text = self.get_text(self.text_filename)
 
+        self.training = training_mode.create_training(self.text)
+
         self.previous_text_status = ''
 
         self.text_label = self.create_text_label()
         self.text_choice_box = self.create_text_choice_box()
+        self.comment_to_line = self.create_comment_to_line()
+        self.instantaneous_speed_label = self.create_instantaneous_speed_label()
 
         self.input_field = self.create_input_field()
-        self.training = training_mode.create_training(self.text)
 
         self.init_window()
 
@@ -48,6 +52,10 @@ class TrainerWindow(QWidget):
 
         layout.addWidget(self.text_label)
 
+        layout.addWidget(self.instantaneous_speed_label)
+
+        layout.addWidget(self.comment_to_line)
+
         layout.addWidget(self.input_field)
         self.input_field.textChanged.connect(self.update_all)
         self.input_field.returnPressed.connect(self.finish)
@@ -64,6 +72,22 @@ class TrainerWindow(QWidget):
         text_choice_box.setMaximumWidth(100)
         text_choice_box.currentTextChanged.connect(self.change_text)
         return text_choice_box
+
+    def create_comment_to_line(self):
+        comment = QLabel()
+        comment.setText("Вводить текст сюда (после оконочания нажать Enter):")
+        comment.setFont(QtGui.QFont("Times", 12))
+        comment.setWordWrap(True)
+        comment.setMaximumHeight(20)
+        return comment
+
+    def create_instantaneous_speed_label(self):
+        instantaneous_speed_label = QLabel()
+        instantaneous_speed_label.setText(f"Мгновенная скорость: {self.training.instantaneous_speed} зн/мин")
+        instantaneous_speed_label.setFont(QtGui.QFont("Times", 14))
+        instantaneous_speed_label.setWordWrap(True)
+        instantaneous_speed_label.setMaximumHeight(30)
+        return instantaneous_speed_label
 
     def change_text(self):
         new_text_filename = self.text_choice_box.currentText()
@@ -85,6 +109,8 @@ class TrainerWindow(QWidget):
         if not self.training.started:
             self.training.start()
             self.training.started = True
+        self.training.update(self.input_field.text())
+        self.instantaneous_speed_label.setText(f"Мгновенная скорость: {self.training.instantaneous_speed} зн/мин")
         status = self.find_changes()
         self.color_text(self.training.current_letter_index, status)
         self.previous_text_status = self.input_field.text()
@@ -117,7 +143,8 @@ class TrainerWindow(QWidget):
         input_field.setStyleSheet('font-weight: 100; font-size:14pt;')
         return input_field
 
-    def get_text(self, filename):
+    @staticmethod
+    def get_text(filename):
         with open(f'texts\\{filename}', 'r', encoding='utf-8') as t:
             return t.read()
 

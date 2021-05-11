@@ -13,13 +13,22 @@ def make_statistics(finish_time, start_time, current_text, training_text):
             'time': time_str}
 
 
-def get_speed(current_text, total_time):
-    return round(len(current_text) / (total_time / 60))
+def get_speed(result_text, total_time):
+    return round(len(result_text) / (total_time / 60))
+
+
+def get_instantaneous_speed(current_text, current_time):
+    if current_time == 0:
+        return 0
+    else:
+        return round(len(current_text) / (current_time / 60))
 
 
 def get_accuracy(current_text, right_symbols):
-    return 0 if len(current_text) == 0 \
-        else round(right_symbols / len(current_text) * 100)
+    if not current_text:
+        return 0
+    else:
+        return round(right_symbols / len(current_text) * 100)
 
 
 def get_right_symbols_amount(current_text, training_text):
