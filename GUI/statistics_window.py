@@ -1,28 +1,27 @@
+import sys
+from sys import argv, executable
+import os
+
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
     QLabel, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView, QLineEdit
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets, QtCore
 
 import GUI.trainer_window
-import sys
-
-from sys import argv, executable
-import os
-
+from settings import StatWindowSettings
 import statistics
 
 
 class StatisticsWindow(QWidget):
     def __init__(self, stat):
         super().__init__()
-        self.title = "Результаты"
-        self.top = 200
-        self.left = 200
-        self.width = 500
-        self.height = 300
+        self.title = StatWindowSettings.title
+        self.top = StatWindowSettings.top
+        self.left = StatWindowSettings.left
+        self.width = StatWindowSettings.width
+        self.height = StatWindowSettings.height
         self.init_window()
         self.stat = stat
-
         self.layout = QVBoxLayout()
 
         self.name_input = self.create_name_input()
@@ -44,28 +43,28 @@ class StatisticsWindow(QWidget):
         layout.addWidget(self.name_input)
 
         button_layout = QHBoxLayout()
-        start_new_game_button = QPushButton('Начать новую игру!', self)
-        show_all_stat_button = QPushButton('Таблица рекордов', self)
+        start_new_game_button = QPushButton(StatWindowSettings.start_new_game_text, self)
+        show_records_button = QPushButton(StatWindowSettings.show_records_text, self)
         start_new_game_button.clicked.connect(self.start_new_game)
-        show_all_stat_button.clicked.connect(self.show_record_table)
+        show_records_button.clicked.connect(self.show_record_table)
         button_layout.addWidget(start_new_game_button)
-        button_layout.addWidget(show_all_stat_button)
-
+        button_layout.addWidget(show_records_button)
         layout.addLayout(button_layout)
 
         self.layout = layout
-
         self.setLayout(layout)
 
     def create_name_input(self):
         name_input = QLineEdit()
-        name_input.setStyleSheet('font-weight: 100; font-size:12pt;')
+        name_input.setStyleSheet(f'font-weight: '
+                                 f'{StatWindowSettings.name_input_font_weight}')
+        name_input.setFont(StatWindowSettings.name_input_font)
         return name_input
 
     def create_name_input_comment(self):
         comment = QLabel()
-        comment.setText("Как вас зовут? (Нажмите Enter, чтобы сохранить)")
-        comment.setFont(QtGui.QFont("Times", 12))
+        comment.setText(StatWindowSettings.comment)
+        comment.setFont(StatWindowSettings.comment_font)
         comment.setMaximumHeight(36)
         comment.setWordWrap(True)
         return comment
