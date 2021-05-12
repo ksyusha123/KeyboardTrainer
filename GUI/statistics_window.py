@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
-    QLabel, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView
+    QLabel, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView, QLineEdit
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets, QtCore
 
@@ -25,6 +25,9 @@ class StatisticsWindow(QWidget):
 
         self.layout = QVBoxLayout()
 
+        self.name_input = self.create_name_input()
+        self.name_input_comment = self.create_name_input_comment()
+
         self.create_layout()
 
     def init_window(self):
@@ -36,6 +39,9 @@ class StatisticsWindow(QWidget):
         layout = QVBoxLayout()
         stat_label = self.create_statistics_label()
         layout.addWidget(stat_label)
+
+        layout.addWidget(self.name_input_comment)
+        layout.addWidget(self.name_input)
 
         button_layout = QHBoxLayout()
         start_new_game_button = QPushButton('Начать новую игру!', self)
@@ -50,6 +56,22 @@ class StatisticsWindow(QWidget):
         self.layout = layout
 
         self.setLayout(layout)
+
+    def create_name_input(self):
+        name_input = QLineEdit()
+        name_input.setStyleSheet('font-weight: 100; font-size:12pt;')
+        return name_input
+
+    def create_name_input_comment(self):
+        comment = QLabel()
+        comment.setText("Как вас зовут? (Нажмите Enter, чтобы сохранить)")
+        comment.setFont(QtGui.QFont("Times", 12))
+        comment.setMaximumHeight(36)
+        comment.setWordWrap(True)
+        return comment
+
+    # def save_username(self):
+
 
     def create_statistics_label(self):
         stat_label = QLabel()

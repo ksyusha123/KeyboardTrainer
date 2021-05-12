@@ -2,7 +2,7 @@ import sys
 import os
 
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, \
-    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QComboBox
+    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QComboBox, QProgressBar
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
@@ -17,13 +17,22 @@ class TrainerWindow(QWidget):
         self.title = "Клавиатурный тренажер"
         self.top = 100
         self.left = 100
-        self.width = 800
-        self.height = 600
+        self.width = 960
+        self.height = 480
+
+        oImage = QtGui.QImage('python_black.png')
+        sImage = oImage.scaled(QtCore.QSize(self.width, self.height))
+        palette = QtGui.QPalette()
+        palette.setBrush(QtGui.QPalette.Window, QtGui.QBrush(sImage))
+        self.setPalette(palette)
 
         self.text_filename = 'ЗаконАмдала.txt'
         self.text = self.get_text(self.text_filename)
 
         self.training = training_mode.create_training(self.text)
+
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setValue(0)
 
         self.previous_text_status = ''
 
@@ -57,6 +66,9 @@ class TrainerWindow(QWidget):
         layout.addWidget(self.comment_to_line)
 
         layout.addWidget(self.input_field)
+
+        layout.addWidget(self.progress_bar)
+
         self.input_field.textChanged.connect(self.update_all)
         self.input_field.returnPressed.connect(self.finish)
 
@@ -64,6 +76,9 @@ class TrainerWindow(QWidget):
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
 
         self.setLayout(layout)
+
+    def create_progress_bar(self):
+        
 
     def create_text_choice_box(self):
         text_choice_box = QComboBox()
@@ -77,6 +92,7 @@ class TrainerWindow(QWidget):
         comment = QLabel()
         comment.setText("Вводить текст сюда (после оконочания нажать Enter):")
         comment.setFont(QtGui.QFont("Times", 12))
+        comment.setStyleSheet('color: "white"')
         comment.setWordWrap(True)
         comment.setMaximumHeight(20)
         return comment
@@ -85,6 +101,7 @@ class TrainerWindow(QWidget):
         instantaneous_speed_label = QLabel()
         instantaneous_speed_label.setText(f"Мгновенная скорость: {self.training.instantaneous_speed} зн/мин")
         instantaneous_speed_label.setFont(QtGui.QFont("Times", 14))
+        instantaneous_speed_label.setStyleSheet('color: "white"')
         instantaneous_speed_label.setWordWrap(True)
         instantaneous_speed_label.setMaximumHeight(30)
         return instantaneous_speed_label
@@ -111,6 +128,7 @@ class TrainerWindow(QWidget):
             self.training.started = True
         self.training.update(self.input_field.text())
         self.instantaneous_speed_label.setText(f"Мгновенная скорость: {self.training.instantaneous_speed} зн/мин")
+        self.update_progress_bar()
         status = self.find_changes()
         self.color_text(self.training.current_letter_index, status)
         self.previous_text_status = self.input_field.text()
@@ -134,8 +152,12 @@ class TrainerWindow(QWidget):
         text_label = QLabel()
         text_label.setText(self.text)
         text_label.setFont(QtGui.QFont("Times", 18))
+        text_label.setStyleSheet('color: "white"')
         text_label.setWordWrap(True)
         return text_label
+
+    def update_progress_bar(self):
+        self.progress_bar.setValue(self.training.progress_status)
 
     @staticmethod
     def create_input_field():
