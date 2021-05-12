@@ -8,6 +8,7 @@ from PyQt5 import QtCore
 
 import training_mode
 from GUI.statistics_window import StatisticsWindow
+from GUI.addfile_window import AddFileWindow
 import statistics
 from settings import TrainerWindowSettings
 
@@ -36,6 +37,7 @@ class TrainerWindow(QWidget):
 
         self.init_window()
         self.stat_window = QWidget()
+        self.add_text_window = QWidget()
 
     def init_window(self):
         self.setWindowTitle(self.title)
@@ -46,7 +48,7 @@ class TrainerWindow(QWidget):
     def create_layout(self):
         layout = QVBoxLayout()
 
-        layout.addWidget(self.text_choice_box)
+        layout.addLayout(self.create_text_choice_layout())
         layout.addWidget(self.text_label)
         layout.addWidget(self.instantaneous_speed_label)
         layout.addWidget(self.comment_to_line)
@@ -60,6 +62,19 @@ class TrainerWindow(QWidget):
         layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
 
         self.setLayout(layout)
+
+    def create_text_choice_layout(self):
+        text_choice_layout = QHBoxLayout()
+        text_choice_layout.addWidget(self.text_choice_box)
+        add_text_button = QPushButton(TrainerWindowSettings.add_text_button)
+        add_text_button.setMaximumWidth(100)
+        add_text_button.clicked.connect(self.add_text)
+        text_choice_layout.addWidget(add_text_button)
+        text_choice_layout.addStretch(1)
+        return text_choice_layout
+
+    def add_text(self):
+        self.add_text_window = AddFileWindow(self)
 
     def create_label(self, text, font, color, max_height=-1):
         label = QLabel()
@@ -97,8 +112,19 @@ class TrainerWindow(QWidget):
         self.text_label.setText(self.text)
         self.training.training_text = self.text
 
+    def update_text_choice_box_after_adding(self):
+        text_names = self.get_text_names()
+        current_text_names = [self.text_choice_box.itemText(i) for i in range(self.text_choice_box.count())]
+        print(text_names)
+        print(current_text_names)
+        for text_name in text_names:
+            if text_name not in current_text_names:
+                self.text_choice_box.addItem(text_name)
+                break
+
     def get_text_names(self):
         texts = os.walk('texts')
+        print(texts)
         text_names = []
         for text in texts:
             text_names += text[2]
