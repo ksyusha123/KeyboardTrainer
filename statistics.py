@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 
 
 def make_statistics(finish_time, start_time, current_text, training_text):
@@ -40,9 +41,17 @@ def get_right_symbols_amount(current_text, training_text):
 
 
 def save_statistics(stat):
-    stat_line = ' '.join(stat.values())
-    with open('statistics.txt', 'a', encoding='utf-8') as f:
-        f.write(f'{stat_line}\n')
+    with open('statistics.json', 'r') as f:
+        stat_json = f.read()
+        stat_list = json.loads(stat_json)
+
+    stat_list.append(stat)
+
+    with open('statistics.json', 'w') as f:
+        f.write(json.dumps(stat_list))
+    # stat_line = ' '.join(stat.values())
+    # with open('statistics.txt', 'a', encoding='utf-8') as f:
+    #     f.write(f'{stat_line}\n')
 
 
 def get_top_results(amount):

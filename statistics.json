@@ -1,62 +1,11 @@
 [
   {
-    "name": "",
-    "speed": 150,
-    "accuracy": 98,
-    "date": "08/05/21"
+    "speed": 190,
+    "accuracy": 100,
+    "time": "16/05/21 01:14:50"
   },
   {
-    "name": "",
-    "speed": 209,
-    "accuracy": 97,
-    "date": "09/05/21"
-  },
-  {
-    "name": "",
-    "speed": 150,
-    "accuracy": 98,
-    "date": "08/05/21"
-  },
-  {
-    "name": "",
-    "speed": 150,
-    "accuracy": 98,
-    "date": "08/05/21"
-  },
-  {
-    "name": "",
-    "speed": 150,
-    "accuracy": 98,
-    "date": "08/05/21"
-  },
-  {
-    "name": "",
-    "speed": 150,
-    "accuracy": 98,
-    "date": "08/05/21"
-  },
-  {
-    "name": "",
-    "speed": 150,
-    "accuracy": 98,
-    "date": "08/05/21"
-  },
-  {
-    "name": "",
-    "speed": 150,
-    "accuracy": 98,
-    "date": "08/05/21"
-  },
-  {
-    "name": "",
-    "speed": 150,
-    "accuracy": 98,
-    "date": "08/05/21"
-  },
-  {
-    "name": "",
-    "speed": 150,
-    "accuracy": 98,
-    "date": "08/05/21"
-  }
+    "speed": "0",
+    "accuracy": "0",
+    "time": "16/05/21 01:21:39"}
 ]

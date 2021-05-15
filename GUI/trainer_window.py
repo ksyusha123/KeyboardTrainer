@@ -37,6 +37,7 @@ class TrainerWindow(QWidget):
 
         self.init_window()
         self.stat_window = QWidget()
+        self.input_field.setFocus()
         self.add_text_window = QWidget()
 
     def init_window(self):

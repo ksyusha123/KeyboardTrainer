@@ -20,7 +20,6 @@ class StatisticsWindow(QWidget):
         self.left = StatWindowSettings.left
         self.width = StatWindowSettings.width
         self.height = StatWindowSettings.height
-        self.init_window()
         self.stat = stat
         self.layout = QVBoxLayout()
 
@@ -28,6 +27,8 @@ class StatisticsWindow(QWidget):
         self.name_input_comment = self.create_name_input_comment()
 
         self.create_layout()
+        self.name_input.setFocus()
+        self.init_window()
 
     def init_window(self):
         self.setWindowTitle(self.title)
@@ -56,6 +57,8 @@ class StatisticsWindow(QWidget):
 
     def create_name_input(self):
         name_input = QLineEdit()
+        name_input.setText("Unknown")
+        name_input.selectAll()
         name_input.setStyleSheet(f'font-weight: '
                                  f'{StatWindowSettings.name_input_font_weight}')
         name_input.setFont(StatWindowSettings.name_input_font)
