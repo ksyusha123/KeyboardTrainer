@@ -1,14 +1,15 @@
 import sys
 import os
+import shutil
 
-from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, \
-    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QComboBox, QProgressBar
+from PyQt5.QtWidgets import (QWidget, QApplication, QPushButton, QVBoxLayout,
+                             QGroupBox, QHBoxLayout, QLabel, QLineEdit,
+                             QComboBox, QProgressBar, QFileDialog)
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 
 import training_mode
 from GUI.statistics_window import StatisticsWindow
-from GUI.addfile_window import AddFileWindow
 import statistics
 from settings import TrainerWindowSettings
 
@@ -39,7 +40,6 @@ class TrainerWindow(QWidget):
         self.init_window()
         self.stat_window = QWidget()
         self.input_field.setFocus()
-        self.add_text_window = QWidget()
 
     def init_window(self):
         self.setWindowTitle(self.title)
@@ -69,16 +69,22 @@ class TrainerWindow(QWidget):
         text_choice_layout = QHBoxLayout()
         text_choice_layout.addWidget(self.text_choice_box)
         add_text_button = QPushButton(TrainerWindowSettings.add_text_button)
-        add_text_button.setMaximumWidth(100)
+        add_text_button.setMinimumWidth(
+            TrainerWindowSettings.add_text_max_width)
         add_text_button.clicked.connect(self.add_text)
         text_choice_layout.addWidget(add_text_button)
         text_choice_layout.addStretch(1)
         return text_choice_layout
 
     def add_text(self):
-        self.add_text_window = AddFileWindow(self)
+        filepath = QFileDialog.getOpenFileName(self, 'Добавить текст', '/',
+                                                     'Text files (*.txt)')[0]
+        if os.path.exists(filepath) and os.path.isfile(filepath):
+            shutil.copy(filepath, '.\\texts\\')
+            self.update_text_choice_box_after_adding()
 
-    def create_label(self, text, font, color, max_height=-1):
+    @staticmethod
+    def create_label(text, font, color, max_height=-1):
         label = QLabel()
         label.setText(text)
         label.setFont(font)
@@ -88,7 +94,8 @@ class TrainerWindow(QWidget):
         label.setWordWrap(True)
         return label
 
-    def create_progress_bar(self):
+    @staticmethod
+    def create_progress_bar():
         progress_bar = QProgressBar()
         progress_bar.setValue(0)
         progress_bar.setStyleSheet(f'color: '
@@ -106,7 +113,8 @@ class TrainerWindow(QWidget):
         text_choice_box = QComboBox()
         text_names = self.get_text_names()
         text_choice_box.addItems(text_names)
-        text_choice_box.setMaximumWidth(100)
+        text_choice_box.setMinimumWidth(
+            TrainerWindowSettings.text_box_min_width)
         text_choice_box.currentTextChanged.connect(self.change_text)
         return text_choice_box
 
@@ -127,7 +135,6 @@ class TrainerWindow(QWidget):
 
     def get_text_names(self):
         texts = os.walk('texts')
-        print(texts)
         text_names = []
         for text in texts:
             text_names += text[2]
