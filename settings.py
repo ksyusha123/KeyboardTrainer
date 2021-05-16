@@ -32,6 +32,7 @@ class StatWindowSettings:
     name_input_font_weight = 100
     name_input_font = QtGui.QFont('Arial', 12)
     comment = "Введите имя (Enter для сохранения)"
+    stat_label_font = QtGui.QFont('Times', 18)
 
 
 class AddFileWindowSettings:
@@ -50,7 +51,3 @@ class AddNameWindowSettings:
     top = 200
     left = 200
     text = 'Ваше имя успешно сохранено!'
-
-
-
-

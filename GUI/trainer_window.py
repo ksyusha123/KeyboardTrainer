@@ -218,4 +218,5 @@ class TrainerWindow(QWidget):
                     [self.training.current_letter_index]):
                 return 'right'
             else:
+                self.training.typo_amount += 1
                 return 'wrong'

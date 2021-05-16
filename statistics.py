@@ -2,11 +2,11 @@ from datetime import datetime
 import json
 
 
-def make_statistics(finish_time, start_time, current_text, training_text):
-    right_symbols = get_right_symbols_amount(current_text, training_text)
+def make_statistics(finish_time, start_time, total_symbol_amount, typo_amount):
+    # right_symbols = get_right_symbols_amount(current_text, training_text)
     total_time = finish_time - start_time
-    speed = get_speed(current_text, total_time)
-    accuracy = get_accuracy(current_text, right_symbols)
+    speed = get_speed(total_symbol_amount, total_time)
+    accuracy = get_accuracy(total_symbol_amount, typo_amount)
     date = datetime.now().date()
     date_str = date.strftime('%d/%m/%y')
     return {'name': 'Unknown',
@@ -16,30 +16,31 @@ def make_statistics(finish_time, start_time, current_text, training_text):
             }
 
 
-def get_speed(result_text, total_time):
-    return round(len(result_text) / (total_time / 60))
+def get_speed(total_symbol_amount, total_time):
+    return round(total_symbol_amount / (total_time / 60))
 
 
-def get_instantaneous_speed(current_text, current_time):
+def get_instantaneous_speed(total_symbol_amount, current_time):
     if current_time == 0:
         return 0
     else:
-        return round(len(current_text) / (current_time / 60))
+        return round(total_symbol_amount / (current_time / 60))
 
 
-def get_accuracy(current_text, right_symbols):
-    if not current_text:
+def get_accuracy(total_symbol_amount, typo_amount):
+    if total_symbol_amount == 0:
         return 0
     else:
-        return round(right_symbols / len(current_text) * 100)
+        return round(((total_symbol_amount - typo_amount) / total_symbol_amount)
+                     * 100)
 
 
-def get_right_symbols_amount(current_text, training_text):
-    right_symbols = 0
-    for i in range(min(len(current_text), len(training_text))):
-        if training_text[i] == current_text[i]:
-            right_symbols += 1
-    return right_symbols
+# def get_right_symbols_amount(current_text, training_text):
+#     right_symbols = 0
+#     for i in range(min(len(current_text), len(training_text))):
+#         if training_text[i] == current_text[i]:
+#             right_symbols += 1
+#     return right_symbols
 
 
 def save_statistics(stat):

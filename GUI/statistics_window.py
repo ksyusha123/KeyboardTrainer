@@ -47,8 +47,10 @@ class StatisticsWindow(QWidget):
         layout.addWidget(self.name_input)
 
         button_layout = QHBoxLayout()
-        start_new_game_button = QPushButton(StatWindowSettings.start_new_game_text, self)
-        show_records_button = QPushButton(StatWindowSettings.show_records_text, self)
+        start_new_game_button = QPushButton(
+            StatWindowSettings.start_new_game_text, self)
+        show_records_button = QPushButton(
+            StatWindowSettings.show_records_text, self)
         start_new_game_button.clicked.connect(self.start_new_game)
         show_records_button.clicked.connect(self.show_record_table)
         button_layout.addWidget(start_new_game_button)
@@ -87,7 +89,7 @@ class StatisticsWindow(QWidget):
         stat_label = QLabel()
         text_stat = self.make_text_stat()
         stat_label.setText(text_stat)
-        stat_label.setFont(QtGui.QFont('Times', 18))
+        stat_label.setFont(StatWindowSettings.stat_label_font)
         return stat_label
 
     def make_text_stat(self):
@@ -97,7 +99,9 @@ class StatisticsWindow(QWidget):
 
     def show_record_table(self):
         self.layout.removeWidget(self.stat_label)
+        self.stat_label.setParent(None)
         self.layout.removeWidget(self.name_input)
+        self.name_input.setParent(None)
         record_table_label = self.create_record_table()
         self.layout.insertWidget(0, record_table_label)
 
