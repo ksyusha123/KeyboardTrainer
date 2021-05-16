@@ -4,22 +4,18 @@ import statistics
 
 class Test(unittest.TestCase):
     def test_accuracy(self):
-        self.assertEqual(100, statistics.get_accuracy('someText', 8))
-        self.assertEqual(50, statistics.get_accuracy('someText', 4))
-        self.assertEqual(0, statistics.get_accuracy('', 0))
+        self.assertEqual(100, statistics.get_accuracy(10, 0))
+        self.assertEqual(50, statistics.get_accuracy(8, 4))
+        self.assertEqual(0, statistics.get_accuracy(10, 10))
+        self.assertEqual(0, statistics.get_accuracy(0, 0))
 
-    def test_right_symbols_amount(self):
-        training_text = 'someText'
-        self.assertEqual(
-            8, statistics.get_right_symbols_amount('someText', training_text))
-        self.assertEqual(
-            7, statistics.get_right_symbols_amount('someTexg', training_text))
-        self.assertEqual(
-            7, statistics.get_right_symbols_amount('sometext', training_text))
-        self.assertEqual(
-            0, statistics.get_right_symbols_amount('', training_text))
-        self.assertEqual(
-            0, statistics.get_right_symbols_amount('', ''))
+    def test_speed(self):
+        self.assertEqual(400, statistics.get_speed(20, 3))
+        self.assertEqual(0, statistics.get_speed(0, 3))
+
+    def test_instantaneous_speed(self):
+        self.assertEqual(400, statistics.get_instantaneous_speed(20, 3))
+        self.assertEqual(0, statistics.get_instantaneous_speed(0, 0))
 
 
 if __name__ == '__main__':
