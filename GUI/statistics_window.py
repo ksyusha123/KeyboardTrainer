@@ -2,8 +2,9 @@ import sys
 from sys import argv, executable
 import os
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
-    QLabel, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView, QLineEdit, QMessageBox
+from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel,
+                             QPushButton, QTableWidget, QTableWidgetItem,
+                             QHeaderView, QLineEdit, QMessageBox)
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets, QtCore
 
@@ -63,8 +64,9 @@ class StatisticsWindow(QWidget):
         name_input.setText("Unknown")
         name_input.setPlaceholderText(StatWindowSettings.comment)
         name_input.selectAll()
-        name_input.setStyleSheet(f'font-weight: '
-                                 f'{StatWindowSettings.name_input_font_weight}')
+        name_input\
+            .setStyleSheet(f'font-weight: '
+                           f'{StatWindowSettings.name_input_font_weight}')
         name_input.setFont(StatWindowSettings.name_input_font)
         return name_input
 
@@ -113,7 +115,8 @@ class StatisticsWindow(QWidget):
             items = records[i]
             j = 0
             for component in items.keys():
-                record_table.setItem(i, j, QTableWidgetItem(str(items[component])))
+                record_table\
+                    .setItem(i, j, QTableWidgetItem(str(items[component])))
                 j += 1
         record_table.resizeColumnsToContents()
         horizontal_header = record_table.horizontalHeader()

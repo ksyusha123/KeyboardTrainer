@@ -10,7 +10,7 @@ class TrainerWindowSettings:
     top = 100
     left = 100
     text_color = 'white'
-    training_text_font = QtGui.QFont("Times", 18)
+    train_text_font = QtGui.QFont("Times", 18)
     comment = "Вводить текст сюда (Enter - чтобы закончить):"
     comment_font = QtGui.QFont("Times", 12)
     current_speed_font = QtGui.QFont("Times", 12)

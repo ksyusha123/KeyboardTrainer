@@ -31,7 +31,8 @@ class TrainerWindow(QWidget):
         self.text_label = self.create_text_label()
         self.text_choice_box = self.create_text_choice_box()
         self.comment_to_line = self.create_comment_to_line()
-        self.instantaneous_speed_label = self.create_instantaneous_speed_label()
+        self.instantaneous_speed_label = self\
+            .create_instantaneous_speed_label()
         self.input_field = self.create_input_field()
         self.progress_bar = self.create_progress_bar()
 
@@ -90,11 +91,13 @@ class TrainerWindow(QWidget):
     def create_progress_bar(self):
         progress_bar = QProgressBar()
         progress_bar.setValue(0)
-        progress_bar.setStyleSheet(f'color: {TrainerWindowSettings.text_color}')
+        progress_bar.setStyleSheet(f'color: '
+                                   f'{TrainerWindowSettings.text_color}')
         return progress_bar
 
     def set_image(self):
-        window_image = TrainerWindowSettings.image.scaled(QtCore.QSize(self.width, self.height))
+        window_image = TrainerWindowSettings.image\
+            .scaled(QtCore.QSize(self.width, self.height))
         palette = QtGui.QPalette()
         palette.setBrush(QtGui.QPalette.Window, QtGui.QBrush(window_image))
         self.setPalette(palette)
@@ -115,9 +118,8 @@ class TrainerWindow(QWidget):
 
     def update_text_choice_box_after_adding(self):
         text_names = self.get_text_names()
-        current_text_names = [self.text_choice_box.itemText(i) for i in range(self.text_choice_box.count())]
-        print(text_names)
-        print(current_text_names)
+        current_text_names = [self.text_choice_box.itemText(i)
+                              for i in range(self.text_choice_box.count())]
         for text_name in text_names:
             if text_name not in current_text_names:
                 self.text_choice_box.addItem(text_name)
@@ -139,7 +141,9 @@ class TrainerWindow(QWidget):
             self.training.start()
             self.training.started = True
         self.training.update(self.input_field.text())
-        self.instantaneous_speed_label.setText(f"Мгновенная скорость: {self.training.instantaneous_speed} зн/мин")
+        self.instantaneous_speed_label\
+            .setText(f"Мгновенная скорость: "
+                     f"{self.training.instantaneous_speed} зн/мин")
         self.update_progress_bar()
         status = self.find_changes()
         self.color_text(self.training.current_letter_index, status)
@@ -165,7 +169,7 @@ class TrainerWindow(QWidget):
 
     def create_text_label(self):
         text_label = self.create_label(self.text,
-                                       TrainerWindowSettings.training_text_font,
+                                       TrainerWindowSettings.train_text_font,
                                        TrainerWindowSettings.text_color)
         return text_label
 
@@ -178,7 +182,8 @@ class TrainerWindow(QWidget):
 
     def create_instantaneous_speed_label(self):
         cur_speed_lbl = self \
-            .create_label(f"Мгновенная скорость: {self.training.instantaneous_speed} зн/мин",
+            .create_label(f"Мгновенная скорость: "
+                          f"{self.training.instantaneous_speed} зн/мин",
                           TrainerWindowSettings.current_speed_font,
                           TrainerWindowSettings.text_color,
                           30)
@@ -190,8 +195,9 @@ class TrainerWindow(QWidget):
     @staticmethod
     def create_input_field():
         input_field = QLineEdit()
-        input_field.setStyleSheet(f'font-weight: '
-                                  f'{TrainerWindowSettings.input_field_font_weight}')
+        input_field\
+            .setStyleSheet(f'font-weight: '
+                           f'{TrainerWindowSettings.input_field_font_weight}')
         input_field.setFont(TrainerWindowSettings.input_field_font)
         return input_field
 

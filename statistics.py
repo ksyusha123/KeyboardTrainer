@@ -57,7 +57,9 @@ def get_top_results(amount):
     with open('statistics.json') as f:
         stat_json = f.read()
         stat_list = json.loads(stat_json)
-    stat_list.sort(key=lambda record: int(record["speed"]) * int(record["accuracy"]), reverse=True)
+    stat_list.sort(key=lambda record:
+                   int(record["speed"]) * int(record["accuracy"]),
+                   reverse=True)
     records = stat_list[:amount]
     return records
 
