@@ -45,12 +45,12 @@ def get_right_symbols_amount(current_text, training_text):
 def save_statistics(stat):
     with open('statistics.json', 'r') as f:
         stat_json = f.read()
-        stat_list = json.loads(stat_json)
+        stat_list = json.loads(stat_json, )
 
     stat_list.append(stat)
 
     with open('statistics.json', 'w') as f:
-        f.write(json.dumps(stat_list, indent=4))
+        f.write(json.dumps(stat_list, indent=4, ensure_ascii=False))
 
 
 def get_top_results(amount):
@@ -59,9 +59,16 @@ def get_top_results(amount):
         stat_list = json.loads(stat_json)
     stat_list.sort(key=lambda record: int(record["speed"]) * int(record["accuracy"]), reverse=True)
     records = stat_list[:amount]
-    # with open('statistics.txt', 'r', encoding='utf-8') as stat:
-    #     lines = stat.readlines()
-    # lines.sort(key=lambda line: int(line.split()[0]) * int(line.split()[1]),
-    #            reverse=True)
-    # records = lines[:amount]
     return records
+
+
+def add_name_to_stat(name):
+    with open('statistics.json', 'r') as f:
+        stat_json = f.read()
+        stat_list = json.loads(stat_json)
+
+    current_stat = stat_list[-1]
+    current_stat["name"] = name
+
+    with open('statistics.json', 'w') as f:
+        f.write(json.dumps(stat_list, indent=4, ensure_ascii=False))

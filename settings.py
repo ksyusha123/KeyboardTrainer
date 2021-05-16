@@ -20,6 +20,7 @@ class TrainerWindowSettings:
     wrong_color = 'red'
     add_text_button = 'Добавить текст'
 
+
 class StatWindowSettings:
     title = 'Результаты'
     width = 500
@@ -32,13 +33,24 @@ class StatWindowSettings:
     name_input_font = QtGui.QFont('Arial', 12)
     comment = "Введите имя (Enter для сохранения)"
 
-class AddFileWindowSettings():
-    title = 'Результаты'
+
+class AddFileWindowSettings:
     width = 100
     height = 100
     top = 200
     left = 200
     title = 'Добавить текст'
     comment = 'Введите абсолютный путь до файла, потом Enter'
+
+
+class AddNameWindowSettings:
+    title = 'Сохранение'
+    width = 100
+    height = 100
+    top = 200
+    left = 200
+    text = 'Ваше имя успешно сохранено!'
+
+
 
 

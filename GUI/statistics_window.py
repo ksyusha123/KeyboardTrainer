@@ -3,11 +3,12 @@ from sys import argv, executable
 import os
 
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, \
-    QLabel, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView, QLineEdit
+    QLabel, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView, QLineEdit, QMessageBox
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets, QtCore
 
 import GUI.trainer_window
+from GUI.add_name_window import AddNameWindow
 from settings import StatWindowSettings
 import statistics
 
@@ -28,6 +29,7 @@ class StatisticsWindow(QWidget):
         # self.name_input_comment = self.create_name_input_comment()
 
         self.create_layout()
+        self.add_name_window = QMessageBox()
         self.name_input.setFocus()
         self.init_window()
 
@@ -57,6 +59,7 @@ class StatisticsWindow(QWidget):
 
     def create_name_input(self):
         name_input = QLineEdit()
+        name_input.returnPressed.connect(self.add_name_to_stat)
         name_input.setText("Unknown")
         name_input.setPlaceholderText(StatWindowSettings.comment)
         name_input.selectAll()
@@ -64,6 +67,9 @@ class StatisticsWindow(QWidget):
                                  f'{StatWindowSettings.name_input_font_weight}')
         name_input.setFont(StatWindowSettings.name_input_font)
         return name_input
+
+    def add_name_to_stat(self):
+        self.add_name_window = AddNameWindow(self.name_input.text())
 
     # def create_name_input_comment(self):
     #     comment = QLabel()
