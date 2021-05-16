@@ -23,8 +23,9 @@ class StatisticsWindow(QWidget):
         self.stat = stat
         self.layout = QVBoxLayout()
 
+        self.stat_label = self.create_statistics_label()
         self.name_input = self.create_name_input()
-        self.name_input_comment = self.create_name_input_comment()
+        # self.name_input_comment = self.create_name_input_comment()
 
         self.create_layout()
         self.name_input.setFocus()
@@ -37,10 +38,9 @@ class StatisticsWindow(QWidget):
 
     def create_layout(self):
         layout = QVBoxLayout()
-        stat_label = self.create_statistics_label()
-        layout.addWidget(stat_label)
+        layout.addWidget(self.stat_label)
 
-        layout.addWidget(self.name_input_comment)
+        # layout.addWidget(self.name_input_comment)
         layout.addWidget(self.name_input)
 
         button_layout = QHBoxLayout()
@@ -58,22 +58,22 @@ class StatisticsWindow(QWidget):
     def create_name_input(self):
         name_input = QLineEdit()
         name_input.setText("Unknown")
+        name_input.setPlaceholderText(StatWindowSettings.comment)
         name_input.selectAll()
         name_input.setStyleSheet(f'font-weight: '
                                  f'{StatWindowSettings.name_input_font_weight}')
         name_input.setFont(StatWindowSettings.name_input_font)
         return name_input
 
-    def create_name_input_comment(self):
-        comment = QLabel()
-        comment.setText(StatWindowSettings.comment)
-        comment.setFont(StatWindowSettings.comment_font)
-        comment.setMaximumHeight(36)
-        comment.setWordWrap(True)
-        return comment
+    # def create_name_input_comment(self):
+    #     comment = QLabel()
+    #     comment.setText(StatWindowSettings.comment)
+    #     comment.setFont(StatWindowSettings.comment_font)
+    #     comment.setMaximumHeight(36)
+    #     comment.setWordWrap(True)
+    #     return comment
 
     # def save_username(self):
-
 
     def create_statistics_label(self):
         stat_label = QLabel()
@@ -88,9 +88,8 @@ class StatisticsWindow(QWidget):
         return text_stat
 
     def show_record_table(self):
-        widget_to_remove = self.layout.itemAt(0).widget()
-        self.layout.removeWidget(widget_to_remove)
-        widget_to_remove.setParent(None)
+        self.layout.removeWidget(self.stat_label)
+        self.layout.removeWidget(self.name_input)
         record_table_label = self.create_record_table()
         self.layout.insertWidget(0, record_table_label)
 
@@ -103,11 +102,13 @@ class StatisticsWindow(QWidget):
         record_table.setRowCount(row_count)
         records = statistics.get_top_results(10)
         record_table.setHorizontalHeaderLabels(
-            ['Скорость', 'Точность', 'Дата', 'Время'])
-        for i in range(row_count):
-            items = records[i].split()
-            for j in range(column_count):
-                record_table.setItem(i, j, QTableWidgetItem(items[j]))
+            ['Имя', 'Скорость', 'Точность', 'Дата'])
+        for i in range(len(records)):
+            items = records[i]
+            j = 0
+            for component in items.keys():
+                record_table.setItem(i, j, QTableWidgetItem(str(items[component])))
+                j += 1
         record_table.resizeColumnsToContents()
         horizontal_header = record_table.horizontalHeader()
         for j in range(column_count):

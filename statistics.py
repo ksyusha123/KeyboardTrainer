@@ -7,11 +7,13 @@ def make_statistics(finish_time, start_time, current_text, training_text):
     total_time = finish_time - start_time
     speed = get_speed(current_text, total_time)
     accuracy = get_accuracy(current_text, right_symbols)
-    time = datetime.now()
-    time_str = time.strftime('%d/%m/%y %H:%M:%S')
-    return {'speed': str(speed),
+    date = datetime.now().date()
+    date_str = date.strftime('%d/%m/%y')
+    return {'name': 'Unknown',
+            'speed': str(speed),
             'accuracy': str(accuracy),
-            'time': time_str}
+            'date': date_str
+            }
 
 
 def get_speed(result_text, total_time):
@@ -48,16 +50,18 @@ def save_statistics(stat):
     stat_list.append(stat)
 
     with open('statistics.json', 'w') as f:
-        f.write(json.dumps(stat_list))
-    # stat_line = ' '.join(stat.values())
-    # with open('statistics.txt', 'a', encoding='utf-8') as f:
-    #     f.write(f'{stat_line}\n')
+        f.write(json.dumps(stat_list, indent=4))
 
 
 def get_top_results(amount):
-    with open('statistics.txt', 'r', encoding='utf-8') as stat:
-        lines = stat.readlines()
-    lines.sort(key=lambda line: int(line.split()[0]) * int(line.split()[1]),
-               reverse=True)
-    records = lines[:amount]
+    with open('statistics.json') as f:
+        stat_json = f.read()
+        stat_list = json.loads(stat_json)
+    stat_list.sort(key=lambda record: int(record["speed"]) * int(record["accuracy"]), reverse=True)
+    records = stat_list[:amount]
+    # with open('statistics.txt', 'r', encoding='utf-8') as stat:
+    #     lines = stat.readlines()
+    # lines.sort(key=lambda line: int(line.split()[0]) * int(line.split()[1]),
+    #            reverse=True)
+    # records = lines[:amount]
     return records
