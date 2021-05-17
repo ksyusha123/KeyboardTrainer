@@ -24,6 +24,9 @@ class TrainerWindowSettings:
     text_box_min_width = 150
     texts_folder_path = Path('.', 'texts')
     game_mode_checkbox = 'На время'
+    file_dialog_title = 'Добавить текст'
+    default_train_time = 30000
+    timer_font = QtGui.QFont("Times", 12)
 
 
 class StatWindowSettings:

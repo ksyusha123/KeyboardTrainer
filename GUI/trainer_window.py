@@ -26,6 +26,8 @@ class TrainerWindow(QWidget):
         self.height = TrainerWindowSettings.height
         self.set_image()
 
+        self.timer = QTimer()
+        self.remaining_time = TrainerWindowSettings.default_train_time
         self.text_filename = TrainerWindowSettings.default_text
         self.text = self.get_text(self.text_filename)
         self.training = training_mode.create_training(self.text)
@@ -36,10 +38,9 @@ class TrainerWindow(QWidget):
         self.comment_to_line = self.create_comment_to_line()
         self.instantaneous_speed_label = self\
             .create_instantaneous_speed_label()
+        self.timer_label = self.create_timer_label()
         self.input_field = self.create_input_field()
         self.progress_bar = self.create_progress_bar()
-
-        self.timer = QTimer()
 
         self.init_window()
         self.stat_window = QWidget()
@@ -56,7 +57,7 @@ class TrainerWindow(QWidget):
 
         layout.addLayout(self.create_choice_layout())
         layout.addWidget(self.text_label)
-        layout.addWidget(self.instantaneous_speed_label)
+        layout.addLayout(self.create_train_params_layout())
         layout.addWidget(self.comment_to_line)
         layout.addWidget(self.input_field)
         layout.addWidget(self.progress_bar)
@@ -77,18 +78,32 @@ class TrainerWindow(QWidget):
         text_choice_layout.addStretch(1)
         return text_choice_layout
 
+    def create_train_params_layout(self):
+        train_params_layout = QHBoxLayout()
+        train_params_layout.addWidget(self.instantaneous_speed_label)
+        train_params_layout.addWidget(self.timer_label)
+        return train_params_layout
+
     def create_game_mode_checkbox(self):
         game_mode_checkbox = QCheckBox(
             TrainerWindowSettings.game_mode_checkbox)
         game_mode_checkbox.setStyleSheet(f'color: '
                                          f'{TrainerWindowSettings.text_color}')
-        # game_mode_checkbox.stateChanged.connect(self.change_game_mode)
+        game_mode_checkbox.stateChanged.connect(self.change_game_mode)
         return game_mode_checkbox
 
-    # def change_game_mode(self):
+    def change_game_mode(self):
+        self.training.change_mode()
 
+    def initialise_timer(self):
+        self.timer.timeout.connect(self.update_timer)
+        self.timer.start(1000)
 
-
+    def update_timer(self):
+        self.remaining_time -= 1000
+        remaining_time = self.training.get_remaining_time_for_user(
+            self.remaining_time)
+        self.timer_label.setText(f'Таймер: {remaining_time}')
 
     def create_add_text_button(self):
         add_text_button = QPushButton(TrainerWindowSettings.add_text_button)
@@ -99,7 +114,8 @@ class TrainerWindow(QWidget):
 
     def add_text(self):
         filepath = Path(QFileDialog.getOpenFileName(
-            self, 'Добавить текст', '/', 'Text files (*.txt)')[0])
+            self, TrainerWindowSettings.file_dialog_title,
+            '/', 'Text files (*.txt)')[0])
         if filepath.exists() and filepath.is_file():
             shutil.copy(filepath, TrainerWindowSettings.texts_folder_path)
             self.update_text_choice_box_after_adding()
@@ -166,6 +182,8 @@ class TrainerWindow(QWidget):
         if not self.training.started:
             self.training.start()
             self.training.started = True
+            if self.training.mode == training_mode.Mode.time:
+                self.initialise_timer()
         self.training.update(self.input_field.text())
         self.instantaneous_speed_label\
             .setText(f"Мгновенная скорость: "
@@ -188,6 +206,8 @@ class TrainerWindow(QWidget):
                                     f'{letter_changed}</font>{text_to_type}')
 
     def finish(self):
+        if self.training.mode == training_mode.Mode.time:
+            self.timer.stop()
         user_text = self.input_field.text()
         stat = self.training.finish(user_text)
         self.close()
@@ -214,6 +234,16 @@ class TrainerWindow(QWidget):
                           TrainerWindowSettings.text_color,
                           30)
         return cur_speed_lbl
+
+    def create_timer_label(self):
+        remaining_time = self.training.get_remaining_time_for_user(
+            self.remaining_time)
+        timer_label = self.create_label(f'Таймер: '
+                                        f'{remaining_time}',
+                                        TrainerWindowSettings.timer_font,
+                                        TrainerWindowSettings.text_color,
+                                        30)
+        return timer_label
 
     def update_progress_bar(self):
         self.progress_bar.setValue(self.training.progress_status)
