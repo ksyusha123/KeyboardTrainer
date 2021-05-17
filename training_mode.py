@@ -1,11 +1,18 @@
 from time import perf_counter
 from datetime import datetime
+from enum import Enum
+
 import statistics
 
 
 def create_training(text):
     training = Training(text)
     return training
+
+
+class Mode(Enum):
+    single = 0
+    time = 1
 
 
 class Training:
@@ -19,6 +26,7 @@ class Training:
         self.progress_status = 0
         self.current_letter_index = -1
         self.typo_amount = 0
+        self.mode = Mode.single
         self.started = False
 
     def start(self):

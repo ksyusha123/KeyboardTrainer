@@ -1,12 +1,14 @@
 import sys
 import os
 import shutil
+from pathlib import Path
 
 from PyQt5.QtWidgets import (QWidget, QApplication, QPushButton, QVBoxLayout,
                              QGroupBox, QHBoxLayout, QLabel, QLineEdit,
-                             QComboBox, QProgressBar, QFileDialog)
+                             QComboBox, QProgressBar, QFileDialog, QCheckBox)
 from PyQt5 import QtGui
 from PyQt5 import QtCore
+from PyQt5.QtCore import QTimer, QTime
 
 import training_mode
 from GUI.statistics_window import StatisticsWindow
@@ -37,6 +39,8 @@ class TrainerWindow(QWidget):
         self.input_field = self.create_input_field()
         self.progress_bar = self.create_progress_bar()
 
+        self.timer = QTimer()
+
         self.init_window()
         self.stat_window = QWidget()
         self.input_field.setFocus()
@@ -50,7 +54,7 @@ class TrainerWindow(QWidget):
     def create_layout(self):
         layout = QVBoxLayout()
 
-        layout.addLayout(self.create_text_choice_layout())
+        layout.addLayout(self.create_choice_layout())
         layout.addWidget(self.text_label)
         layout.addWidget(self.instantaneous_speed_label)
         layout.addWidget(self.comment_to_line)
@@ -65,22 +69,39 @@ class TrainerWindow(QWidget):
 
         self.setLayout(layout)
 
-    def create_text_choice_layout(self):
+    def create_choice_layout(self):
         text_choice_layout = QHBoxLayout()
         text_choice_layout.addWidget(self.text_choice_box)
+        text_choice_layout.addWidget(self.create_add_text_button())
+        text_choice_layout.addWidget(self.create_game_mode_checkbox())
+        text_choice_layout.addStretch(1)
+        return text_choice_layout
+
+    def create_game_mode_checkbox(self):
+        game_mode_checkbox = QCheckBox(
+            TrainerWindowSettings.game_mode_checkbox)
+        game_mode_checkbox.setStyleSheet(f'color: '
+                                         f'{TrainerWindowSettings.text_color}')
+        # game_mode_checkbox.stateChanged.connect(self.change_game_mode)
+        return game_mode_checkbox
+
+    # def change_game_mode(self):
+
+
+
+
+    def create_add_text_button(self):
         add_text_button = QPushButton(TrainerWindowSettings.add_text_button)
         add_text_button.setMinimumWidth(
             TrainerWindowSettings.add_text_max_width)
         add_text_button.clicked.connect(self.add_text)
-        text_choice_layout.addWidget(add_text_button)
-        text_choice_layout.addStretch(1)
-        return text_choice_layout
+        return add_text_button
 
     def add_text(self):
-        filepath = QFileDialog.getOpenFileName(self, 'Добавить текст', '/',
-                                                     'Text files (*.txt)')[0]
-        if os.path.exists(filepath) and os.path.isfile(filepath):
-            shutil.copy(filepath, '.\\texts\\')
+        filepath = Path(QFileDialog.getOpenFileName(
+            self, 'Добавить текст', '/', 'Text files (*.txt)')[0])
+        if filepath.exists() and filepath.is_file():
+            shutil.copy(filepath, TrainerWindowSettings.texts_folder_path)
             self.update_text_choice_box_after_adding()
 
     @staticmethod
@@ -134,10 +155,8 @@ class TrainerWindow(QWidget):
                 break
 
     def get_text_names(self):
-        texts = os.walk('texts')
-        text_names = []
-        for text in texts:
-            text_names += text[2]
+        texts = TrainerWindowSettings.texts_folder_path.glob('*.txt')
+        text_names = [file.name for file in texts]
         current_text_index = text_names.index(self.text_filename)
         text_names[0], text_names[current_text_index] = \
             text_names[current_text_index], text_names[0]
@@ -210,7 +229,8 @@ class TrainerWindow(QWidget):
 
     @staticmethod
     def get_text(filename):
-        with open(f'texts\\{filename}', 'r', encoding='utf-8') as t:
+        filepath = TrainerWindowSettings.texts_folder_path.joinpath(filename)
+        with open(filepath, 'r', encoding='utf-8') as t:
             return t.read()
 
     def find_changes(self):

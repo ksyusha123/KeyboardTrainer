@@ -1,8 +1,9 @@
 from PyQt5 import QtGui
+from pathlib import Path
 
 
 class TrainerWindowSettings:
-    image = QtGui.QImage('images\\python_black.png')
+    image = QtGui.QImage(str(Path('./images', 'python_black.png')))
     default_text = 'ЗаконАмдала.txt'
     title = 'Клавиатурный тренажер'
     width = 960
@@ -21,6 +22,8 @@ class TrainerWindowSettings:
     add_text_button = 'Добавить текст'
     add_text_max_width = 100
     text_box_min_width = 150
+    texts_folder_path = Path('.', 'texts')
+    game_mode_checkbox = 'На время'
 
 
 class StatWindowSettings:
