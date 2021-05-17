@@ -31,8 +31,8 @@ def get_accuracy(total_symbol_amount, typo_amount):
     if total_symbol_amount == 0:
         return 0
     else:
-        return round(((total_symbol_amount - typo_amount) / total_symbol_amount)
-                     * 100)
+        return round(((total_symbol_amount - typo_amount) /
+                      total_symbol_amount) * 100)
 
 
 # def get_right_symbols_amount(current_text, training_text):

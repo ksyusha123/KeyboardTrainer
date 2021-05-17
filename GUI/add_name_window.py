@@ -35,5 +35,3 @@ class AddNameWindow(QMessageBox):
             self.close()
         else:
             self.close()
-
-
