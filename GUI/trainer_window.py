@@ -28,6 +28,7 @@ class TrainerWindow(QWidget):
 
         self.timer = QTimer()
         self.remaining_time = TrainerWindowSettings.default_train_time
+
         self.text_filename = TrainerWindowSettings.default_text
         self.text = self.get_text(self.text_filename)
         self.training = training_mode.create_training(self.text)
@@ -36,7 +37,7 @@ class TrainerWindow(QWidget):
         self.text_label = self.create_text_label()
         self.text_choice_box = self.create_text_choice_box()
         self.comment_to_line = self.create_comment_to_line()
-        self.instantaneous_speed_label = self\
+        self.instantaneous_speed_label = self \
             .create_instantaneous_speed_label()
         self.timer_label = self.create_timer_label()
         self.input_field = self.create_input_field()
@@ -94,8 +95,14 @@ class TrainerWindow(QWidget):
 
     def change_game_mode(self):
         self.training.change_mode()
+        if self.training.mode == training_mode.Mode.time:
+            self.timer_label.setVisible(True)
+        else:
+            self.timer_label.setVisible(False)
 
     def initialise_timer(self):
+        QTimer.singleShot(TrainerWindowSettings.default_train_time,
+                          self.finish)
         self.timer.timeout.connect(self.update_timer)
         self.timer.start(1000)
 
@@ -140,7 +147,7 @@ class TrainerWindow(QWidget):
         return progress_bar
 
     def set_image(self):
-        window_image = TrainerWindowSettings.image\
+        window_image = TrainerWindowSettings.image \
             .scaled(QtCore.QSize(self.width, self.height))
         palette = QtGui.QPalette()
         palette.setBrush(QtGui.QPalette.Window, QtGui.QBrush(window_image))
@@ -185,7 +192,7 @@ class TrainerWindow(QWidget):
             if self.training.mode == training_mode.Mode.time:
                 self.initialise_timer()
         self.training.update(self.input_field.text())
-        self.instantaneous_speed_label\
+        self.instantaneous_speed_label \
             .setText(f"Мгновенная скорость: "
                      f"{self.training.instantaneous_speed} зн/мин")
         self.update_progress_bar()
@@ -243,6 +250,7 @@ class TrainerWindow(QWidget):
                                         TrainerWindowSettings.timer_font,
                                         TrainerWindowSettings.text_color,
                                         30)
+        timer_label.setVisible(False)
         return timer_label
 
     def update_progress_bar(self):
@@ -251,7 +259,7 @@ class TrainerWindow(QWidget):
     @staticmethod
     def create_input_field():
         input_field = QLineEdit()
-        input_field\
+        input_field \
             .setStyleSheet(f'font-weight: '
                            f'{TrainerWindowSettings.input_field_font_weight}')
         input_field.setFont(TrainerWindowSettings.input_field_font)
