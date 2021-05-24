@@ -37,8 +37,8 @@ class Training:
         self.current_text = text
         self.instantaneous_speed = statistics \
             .get_instantaneous_speed(len(self.current_text), self.current_time)
-        self.progress_status = int(len(self.current_text)
-                                   / len(self.training_text) * 100)
+        self.progress_status = int(len(self.current_text) /
+                                   len(self.training_text) * 100)
 
     def finish(self, user_text):
         self.finish_time = perf_counter()
@@ -68,4 +68,3 @@ class Training:
         time_in_sec = time_in_ms / 1000
         minutes, seconds = int(time_in_sec / 60), int(time_in_sec % 60)
         return minutes, seconds
-

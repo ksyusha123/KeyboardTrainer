@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+from pathlib import Path
 
 
 def make_statistics(finish_time, start_time, total_symbol_amount, typo_amount):
@@ -44,18 +45,18 @@ def get_accuracy(total_symbol_amount, typo_amount):
 
 
 def save_statistics(stat):
-    with open('statistics.json', 'r') as f:
+    with open(str(Path('.', 'statistics.json')), 'r') as f:
         stat_json = f.read()
         stat_list = json.loads(stat_json, )
 
     stat_list.append(stat)
 
-    with open('statistics.json', 'w') as f:
+    with open(str(Path('.', 'statistics.json')), 'w') as f:
         f.write(json.dumps(stat_list, indent=4, ensure_ascii=False))
 
 
 def get_top_results(amount):
-    with open('statistics.json') as f:
+    with open(str(Path('.', 'statistics.json'))) as f:
         stat_json = f.read()
         stat_list = json.loads(stat_json)
     stat_list.sort(key=lambda record:
@@ -66,12 +67,12 @@ def get_top_results(amount):
 
 
 def add_name_to_stat(name):
-    with open('statistics.json', 'r') as f:
+    with open(str(Path('.', 'statistics.json')), 'r') as f:
         stat_json = f.read()
         stat_list = json.loads(stat_json)
 
     current_stat = stat_list[-1]
     current_stat["name"] = name
 
-    with open('statistics.json', 'w') as f:
+    with open(str(Path('.', 'statistics.json')), 'w') as f:
         f.write(json.dumps(stat_list, indent=4, ensure_ascii=False))
