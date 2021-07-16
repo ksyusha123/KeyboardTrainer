@@ -27,7 +27,6 @@ class StatisticsWindow(QWidget):
 
         self.stat_label = self.create_statistics_label()
         self.name_input = self.create_name_input()
-        # self.name_input_comment = self.create_name_input_comment()
 
         self.create_layout()
         self.add_name_window = QMessageBox()
@@ -43,7 +42,6 @@ class StatisticsWindow(QWidget):
         layout = QVBoxLayout()
         layout.addWidget(self.stat_label)
 
-        # layout.addWidget(self.name_input_comment)
         layout.addWidget(self.name_input)
 
         button_layout = QHBoxLayout()
@@ -74,16 +72,6 @@ class StatisticsWindow(QWidget):
 
     def add_name_to_stat(self):
         self.add_name_window = AddNameWindow(self.name_input.text())
-
-    # def create_name_input_comment(self):
-    #     comment = QLabel()
-    #     comment.setText(StatWindowSettings.comment)
-    #     comment.setFont(StatWindowSettings.comment_font)
-    #     comment.setMaximumHeight(36)
-    #     comment.setWordWrap(True)
-    #     return comment
-
-    # def save_username(self):
 
     def create_statistics_label(self):
         stat_label = QLabel()
@@ -136,7 +124,7 @@ class StatisticsWindow(QWidget):
         return record_table
 
     def start_new_game(self):
-        os.execl(executable, os.path.abspath(__file__), *argv)
-        # QtCore.QCoreApplication.quit()
-        # status = QtCore.QProcess.startDetached(sys.executable, sys.argv)
-        # print(status)
+        # os.execl(executable, os.path.abspath(__file__), *argv)
+        QtCore.QCoreApplication.quit()
+        status = QtCore.QProcess.startDetached(sys.executable, sys.argv)
+        print(status)
